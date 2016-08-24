@@ -2,9 +2,7 @@ package com.jcfontecha;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -84,7 +82,48 @@ public class CalculatorBrain
         }
     }
 
-    Map<String, Token> knownOperations;
+    /**
+     * Map to store the known operations to the CalculatorBrain.
+     */
+    protected Map<String, Token> knownOperations;
+
+    /**
+     * Stack to store the current program as tokens.
+     */
+    private ArrayList<Token> tokenStack;
+
+    public void setProgram(ArrayList<String> program)
+    {
+        if (tokenStack == null)
+        {
+            tokenStack = new ArrayList<Token>();
+        }
+
+        for (Iterator<String> i = program.iterator(); i.hasNext(); )
+        {
+            String symbol = i.next();
+
+            Token operation = knownOperations.get(symbol);
+
+            if (operation != null)
+            {
+                tokenStack.add(operation);
+            }
+            else
+            {
+                try
+                {
+                    Double operandValue = new Double(symbol);
+                    Token operand = TokenFactory.newOperand(operandValue);
+                    tokenStack.add(operand);
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.print("There was an error parsing the program: " + e.getMessage());
+                }
+            }
+        }
+    }
 
     /**
      * Creates a new instance of CalculatorBrain and registers known operations
