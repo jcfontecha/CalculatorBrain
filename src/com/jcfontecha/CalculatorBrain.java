@@ -1,5 +1,10 @@
 package com.jcfontecha;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -46,6 +51,9 @@ public class CalculatorBrain
         }
     }
 
+    /**
+     * Class to create instances of different Token Types.
+     */
     public static class TokenFactory
     {
         public static Token<Double> newOperand(Double num)
@@ -58,12 +66,14 @@ public class CalculatorBrain
             return new Token<String>(var, TokenType.Variable);
         }
 
-        public static Token<Function<Double, Double>> newUnaryOperation(Function<Double, Double> fun)
+        public static Token<Function<Double, Double>> newUnaryOperation(
+                Function<Double, Double> fun)
         {
             return new Token<Function<Double, Double>>(fun, TokenType.UnaryOperation);
         }
 
-        public static Token<BiFunction<Double, Double, Double>> newBinaryOperation(BiFunction<Double, Double, Double> fun)
+        public static Token<BiFunction<Double, Double, Double>> newBinaryOperation(
+                BiFunction<Double, Double, Double> fun)
         {
             return new Token<BiFunction<Double, Double, Double>>(fun, TokenType.BinaryOperation);
         }
@@ -74,6 +84,39 @@ public class CalculatorBrain
         }
     }
 
-    
+    Map<String, Token> knownOperations;
+
+    /**
+     * Creates a new instance of CalculatorBrain and registers known operations
+     */
+    public CalculatorBrain()
+    {
+        knownOperations = new HashMap<String, Token>();
+
+        // suma
+        knownOperations.put("+", TokenFactory.newBinaryOperation((a, b) -> {
+            return a + b;
+        }));
+
+        // resta
+        knownOperations.put("-", TokenFactory.newBinaryOperation((a, b) -> {
+            return a - b;
+        }));
+
+        // multiplicacion
+        knownOperations.put("*", TokenFactory.newBinaryOperation((a, b) -> {
+            return a - b;
+        }));
+
+        // division
+        knownOperations.put("/", TokenFactory.newBinaryOperation((a, b) -> {
+            return a / b;
+        }));
+    }
+
+    public void ReadProgram(String program)
+    {
+
+    }
 }
 
